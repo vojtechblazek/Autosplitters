@@ -1,4 +1,4 @@
-//Samorost 1 Auto Splitter by vojtechblazek
+//Samorost 1 Autosplitter by blazie
 //version 1.2.0, date 7. 9. 2024
 //Fixes: Fixed autosplitter not working while resetting the game in a certain window
 state("Samorost1"){
