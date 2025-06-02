@@ -1,8 +1,7 @@
 // Version 2.0.0
 // There was a technical update in March of 2025, which broke the previous splitter. This is a hotfix for the new version.
 // Note that the previous splitter doesn't even work with the DirectX9 32bit Backwards Compatible version of the game, as it's not the same.
-// For the old version, go to the steam console and download it with "download_depot 40700 40701 3658574386657440524"
-//Changes: Version focused on debugging - outputting important data to winlog
+//Changes: Changed both the Level and LastAnimation adresses, updated the start conditions.
 
 state("Machinarium"){
     uint Level: "Machinarium.exe", 0x203A18; // Value for changing levels. Table with values at the end of script. Direct adress, no pointers found.
