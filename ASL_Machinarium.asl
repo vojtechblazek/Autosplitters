@@ -6,11 +6,12 @@
 state("Machinarium"){
     uint Level: "Machinarium.exe", 0x203A18; // Value for changing levels. Table with values at the end of script. Direct adress, no pointers found.
     bool LastAnimation: "Machinarium.exe", 0x2039EC; // Start + End Start: Goes from 1 to 0. End: Goes from 0 to 1. add 14.333 s to this, so it matches the run ending
+    int End: "Machinarium.exe", 0x002ACAE8, 0x390; // Is 0, 1 or -1, depending on the situation. I didn't check more.
 }
 
 startup{
-    vars.splitTimeStopwatch = new Stopwatch(); // for ending split 
-    vars.TimesInPrison = 0; // Count how many times the player has been in specific locations.
+    vars.splitTimeStopwatch = new Stopwatch(); // for the ending split 
+    vars.TimesInPrison = 0; // These count how many times the player has been in specific locations.
     vars.TimesInSewer = 0;
     vars.TimesInBand = 0;
     vars.TimesInSquare = 0;
@@ -161,7 +162,7 @@ split{
     if (current.Level == 2600 && old.Level == 2500){ // Entering the rooftop at the end of the game
         return settings["Roof"];
     }
-    if (current.Level == 2600 && current.LastAnimation == 1 && old.LastAnimation == 0){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
+    if (current.Level == 2600 && current.End == 1 && old.End == 0){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
         vars.splitTimeOffset = 14.333f;
         vars.splitTimeStopwatch.Restart();
     }    
