@@ -1,4 +1,4 @@
-// Fire Tonight Auto Splitter by vojtechblazek
+// Fire Tonight Auto Splitter by blazie
 // Utilising ASL Help by Ero
 // v 1.0.0
 // 5. 6. 2025
