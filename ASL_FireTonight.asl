@@ -4,17 +4,11 @@
 // 5. 6. 2025
 state("Fire Tonight"){
     bool casseteLoad: "UnityPlayer.dll", 0x0180CB88, 0x7A8, 0x270;      // for isLoading
-	bool startClick: "UnityPlayer.dll", 0x0180CB88, 0x990, 0x58, 0x984; // alternative way of starting
 }
 
 startup{
 	Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
     vars.Helper.LoadSceneManager = true;
-    vars.startCount = 0;
-
-    settings.Add("STARTS", true, "Start Choice");
-        //settings.Add("ST1", true, "Start - on click", "STARTS");
-        settings.Add("ST2", true, "Start - on Cutscene start", "STARTS");
     
     settings.Add("SPLITS", true, "Activated Splits");
         settings.Add("LV1", true, "Level 1 (Payphone)", "SPLITS");
@@ -24,7 +18,7 @@ startup{
         settings.Add("LV5", true, "Level 5 (Dumpsters)", "SPLITS");
         settings.Add("LV6", true, "Level 6 (Apartment 3)", "SPLITS");
         settings.Add("LV7", true, "Level 7 (Rollerskating)", "SPLITS");
-        settings.Add("LV8", true, "Level 4 (Canal Locks)", "SPLITS");
+        settings.Add("LV8", true, "Level 8 (Canal Locks)", "SPLITS");
 
 
 
@@ -39,14 +33,10 @@ update
 {
 	current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
 	if (current.Scene != old.Scene) {print("Current scene: " + current.Scene);} // debug
-
-    if (current.Scene == "Start" && old.Scene != "Start")                   {vars.startCount = -1;}
-    if (current.startClick == true && old.startClick == false)              {vars.startCount += 1;}
 }
 
 start{
-    //if (current.startClick == true && old.startClick == false && vars.startCount == 1)         {return settings["ST1"];}
-	if (current.Scene != "Start" && old.Scene == "Start")                                      {return settings["ST2"];}
+	if (current.Scene != "Start" && old.Scene == "Start")               {return true;}
 }
 
 split{
