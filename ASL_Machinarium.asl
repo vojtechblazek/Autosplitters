@@ -1,56 +1,76 @@
-// Version 2.0.0
-// There was a technical update in March of 2025, which broke the previous splitter. This is a hotfix for the new version.
-// Note that the previous splitter doesn't even work with the DirectX9 32bit Backwards Compatible version of the game, as it's not the same.
-//Changes: Changed both the Level and LastAnimation adresses, updated the start conditions.
+// Version 3.0.0
+// date 13. 6. 2025
 
-state("Machinarium"){
-    uint Level: "Machinarium.exe", 0x203A18; // Value for changing levels. Table with values at the end of script. Direct adress, no pointers found.
-    bool LastAnimation: "Machinarium.exe", 0x2039EC; // Start + End Start: Goes from 1 to 0. End: Goes from 0 to 1. add 14.333 s to this, so it matches the run ending
-    int End: "Machinarium.exe", 0x002ACAE8, 0x390; // Is 0, 1 or -1, depending on the situation. I didn't check more.
+state("Machinarium", "dx12"){
+    // DX12 Version
+    uint Level: "Machinarium.exe", 0x203A18;
+    bool Start: "Machinarium.exe", 0x2039EC;
+    bool End: "Machinarium.exe", 0x002ACAE8, 0x340;
+}
+
+state("Machinarium", "legacyW32"){
+    uint Level: "Machinarium.exe", 0x1CC8B0;
+    bool Start: "Machinarium.exe", 0x001CD804, 0x1C8, 0x238;
+    bool End: "Machinarium.exe",   0x001CD804, 0x1C8, 0x238; // this start and end is the same
 }
 
 startup{
-    vars.splitTimeStopwatch = new Stopwatch(); // for the ending split 
-    vars.TimesInPrison = 0; // These count how many times the player has been in specific locations.
+    vars.splitTimeStopwatch = new Stopwatch(); // for ending split 
+    vars.TimesInPrison = 0; // Count how many times the player has been in specific locations.
     vars.TimesInSewer = 0;
     vars.TimesInBand = 0;
     vars.TimesInSquare = 0;
     vars.TimesInPub = 0;
     vars.startDbg = 0;
 
-    settings.Add("MAIN", true, "Settings");       
-        settings.Add("SCREENSPLITS", true, "Splits Between Locations", "MAIN");
-            settings.Add("PatrolStation", true, "Patrol Station", "SCREENSPLITS");
-            settings.Add("Bottom", true, "The Bottom", "SCREENSPLITS");
-            settings.Add("Furnace", true, "Furnace", "SCREENSPLITS");
-            settings.Add("PrisonCutscene", true, "Cutscene before prison", "SCREENSPLITS");
-            settings.Add("Prison", true, "Prison", "SCREENSPLITS");
-            settings.Add("GuardRoom", true, "Guard Room (from below)", "SCREENSPLITS");
-            settings.Add("PrisonPuzzle", true, "Prison Puzzle", "SCREENSPLITS");
-            settings.Add("Sea", true, "The Sea (dog location)", "SCREENSPLITS");
-            settings.Add("Band", true, "Robot Band Location", "SCREENSPLITS");
-            settings.Add("AfterCheckers", true, "Robot Band Location (after Checkers)", "SCREENSPLITS");
-            settings.Add("Square", true, "Square", "SCREENSPLITS");
-            settings.Add("ArcadeBridge", true, "Arcade Bridge", "SCREENSPLITS");
-            settings.Add("AfterArcade", true, "Square (after Arcade Bridge)", "SCREENSPLITS");
-            settings.Add("AfterOil", true, "Robot Band Location (after oil collection)", "SCREENSPLITS");
-            settings.Add("Sewer", true, "Sewer", "SCREENSPLITS");
-            settings.Add("Wall", true, "By The Wall", "SCREENSPLITS");
-            settings.Add("AngryFan", true, "Sleeping Fan", "SCREENSPLITS");
-            settings.Add("Glasshouse", true, "Glasshouse", "SCREENSPLITS");
-            settings.Add("Pipes", true, "Policeman on bridge", "SCREENSPLITS");
-            settings.Add("ElevatorAfterPipes", true, "Elevator (from policeman)", "SCREENSPLITS");
-            settings.Add("Hallway", true, "Hallway", "SCREENSPLITS");
-            settings.Add("AfterDefuse", true, "Toilet (after defuse)", "SCREENSPLITS");
-            settings.Add("Machinari", true, "Machinaris chamber", "SCREENSPLITS");
-            settings.Add("AfterMachinari", true, "Basement trip", "SCREENSPLITS");
-            settings.Add("Roof", true, "Roof", "SCREENSPLITS");
+    settings.Add("VER", true, "Game Version (!)"); // choose the game version before launching the game! (or restart LiveSplit after changing the version)
+        settings.Add("5429-A STM-W64-DX12", true, "Current Version (5429-A STM-W64-DX12)", "VER");
+        settings.Add("4012-A STM-W32",      false, "Legacy Version (4012-A STM-W32)", "VER");
+        settings.Add("2975-A STM-W32",      false, "[NOT WORKING YET] Legacy Mac OpenGL Version (2975-A STM-W32)", "VER");
+    
+    settings.Add("SPL", true, "Location Splits");
+        settings.Add("PatrolStation",      true, "Patrol Station", "SPL");
+        settings.Add("Bottom",             true, "The Bottom", "SPL");
+        settings.Add("Furnace",            true, "Furnace", "SPL");
+        settings.Add("PrisonCutscene",     true, "Cutscene before prison", "SPL");
+        settings.Add("Prison",             true, "Prison", "SPL");
+        settings.Add("GuardRoom",          true, "Guard Room (from below)", "SPL");
+        settings.Add("PrisonPuzzle",       true, "Prison Puzzle", "SPL");
+        settings.Add("Sea",                true, "The Sea (dog location)", "SPL");
+        settings.Add("Band",               true, "Robot Band Location", "SPL");
+        settings.Add("AfterCheckers",      true, "Robot Band Location (after Checkers)", "SPL");
+        settings.Add("Square",             true, "Square", "SPL");
+        settings.Add("ArcadeBridge",       true, "Arcade Bridge", "SPL");
+        settings.Add("AfterArcade",        true, "Square (after Arcade Bridge)", "SPL");
+        settings.Add("AfterOil",           true, "Robot Band Location (after oil collection)", "SPL");
+        settings.Add("Sewer",              true, "Sewer", "SPL");
+        settings.Add("Wall",               true, "By The Wall", "SPL");
+        settings.Add("AngryFan",           true, "Sleeping Fan", "SPL");
+        settings.Add("Glasshouse",         true, "Glasshouse", "SPL");
+        settings.Add("Pipes",              true, "Policeman on bridge", "SPL");
+        settings.Add("ElevatorAfterPipes", true, "Elevator (from policeman)", "SPL");
+        settings.Add("Hallway",            true, "Hallway", "SPL");
+        settings.Add("AfterDefuse",        true, "Toilet (after defuse)", "SPL");
+        settings.Add("Machinari",          true, "Machinaris chamber", "SPL");
+        settings.Add("AfterMachinari",     true, "Basement trip", "SPL");
+        settings.Add("Roof",               true, "Roof", "SPL");
         
-        settings.Add("EVENTSPLITS", true, "Event Splits", "MAIN");
-            settings.Add("Dunno", true, "No event splits yet. Any ideas?", "EVENTSPLITS");
+        settings.Add("ESPL", false, "Event Splits");
+            settings.Add("Dunno",          true, "No event splits yet. Any ideas?", "ESPL");
 }
 
-update{ // Keeping track of frequently visited locations
+init{
+    // Looks at which version is checked and connects the appropriate state
+    if (settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"]) {version = "dx12";}
+    if (settings["4012-A STM-W32"] && !settings["5429-A STM-W64-DX12"]) {version = "legacyW32";}
+}
+
+update{ 
+    // Updating game version - doesn't work this way though, so this part of the script does nothing (i don't think the state descriptor can change mid use)
+    //if (settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"]) {version = "dx12";}
+    //if (settings["4012-A STM-W32"] && !settings["5429-A STM-W64-DX12"]) {version = "legacyW32";}
+    
+    // Keeping track of frequently visited locations
     if (current.Level == 600 && old.Level != 600){
         vars.TimesInPrison++;
     }
@@ -67,20 +87,20 @@ update{ // Keeping track of frequently visited locations
         vars.TimesInTimesInPub++;
     }
 //Debugging section
-    if (current.Level == 100 && !current.LastAnimation && old.LastAnimation){
-        vars.startDbg += 1;
-    }
+    // Starting the run
+    if (current.Level == 100 && !current.Start && old.Start) {vars.startDbg += 1;}
+    if (current.Level == 6)                                                  {vars.startDbg = 0;}
     
     if (current.Level != old.Level){
         print("DEBUG: LEVEL VALUE CHANGED FROM " + old.Level + " TO " + current.Level);
     }
-    if (current.LastAnimation != old.LastAnimation){
-        print("DEBUG: LastAnimation VALUE CHANGED FROM " + old.LastAnimation + " TO " + current.LastAnimation);
+    if (current.Start != old.Start){
+        print("DEBUG: Start VALUE CHANGED FROM " + old.Start + " TO " + current.Start);
     }
 }
 
 start{
-    if (current.Level == 100 && !current.LastAnimation && old.LastAnimation && vars.startDbg == 2){
+    if (current.Level == 100 && !current.Start && old.Start && vars.startDbg == 2){
         print("DEBUG: START ACTIVATED");
         return true;
     }
@@ -162,7 +182,7 @@ split{
     if (current.Level == 2600 && old.Level == 2500){ // Entering the rooftop at the end of the game
         return settings["Roof"];
     }
-    if (current.Level == 2600 && current.End == 1 && old.End == 0){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
+    if (current.Level == 2600 && current.End && !old.End){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
         vars.splitTimeOffset = 14.333f;
         vars.splitTimeStopwatch.Restart();
     }    
