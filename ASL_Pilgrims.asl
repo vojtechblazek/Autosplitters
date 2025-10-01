@@ -1,7 +1,7 @@
 // Pilgrims Autosplitter by blazie
 // Utilising ASL Help by Ero
-// v1.0.1
-// 21. 9. 2025
+// v1.0.2
+// 1. 10. 2025
 
 state("Pilgrims"){
 	bool mouseInput: "UnityPlayer.dll", 0x00408C50, 0x0; // for starting the run
@@ -18,7 +18,7 @@ startup{
 	vars.inBearCave	 = false; vars.inDrawBridge	 = false; vars.inCastle 	 = false;
 	vars.inGorge	 = false; // sets every location as "not visited yet"
 
-	settings.Add("Splits",     true, "Split at:");                            settings.SetToolTip("Splits", "Splitting happens only the first time you enter the ticked location!");
+	settings.Add("Splits",     true, "Split at:");                            settings.SetToolTip("Splits", "Splitting happens ONLY the first time you enter the ticked location!");
 	settings.Add("GARDEN",     true, "Potato garden",			"Splits");
 	settings.Add("RIVER",      true, "River (ferrylady)",		"Splits");
 	settings.Add("FCAMP2",     true, "Lower forest camp",		"Splits");
@@ -70,10 +70,6 @@ update{
 		current.Level = old.Level; // this is redundant
 	}
 	// (When on the map, <error>, <null> or "" was thrown)
-
-	if (current.Level != old.Level){
-		print ("Level: " + current.Level + ", previously: " + old.Level);
-	}
 }
 
 start{
@@ -104,9 +100,7 @@ split{
 
 reset{
     if (current.Level == "Intro" && old.Level != "Intro")     {return true;}
-	
-	else if (current.Level != "Outro" && old.Level == "Outro")     {return true;}
-	
+	if (current.Level != "Outro" && old.Level == "Outro")     {return true;}
 }
 
 onReset{
@@ -126,29 +120,3 @@ exit{
 	vars.inBearCave	 = false; vars.inDrawBridge	 = false; vars.inCastle 	 = false;
 	vars.inGorge	 = false;
 }
-
-/* LOCATION NAMES
-
-Intro			Intro
-Stan			HobosLair
-Brambory		Garden
-Loďka			River
-Ohniště	dolní	ForestCamp2
-Bandita			OldOak
-
-Bába			Bridge
-Hospoda			Pub
-Ježibaba		Hut
-Vodníček		Dwarf
-Čert			Pit
-Kostel			Church
-Ohniště horní	ForestCamp1
-Jezírko			Pond
-Medvěd			BearCave
-
-Předhradí		Drawbridge
-Hrad			Castle
-Drak			Gorge
-Titulky			Outro
- 
-*/
