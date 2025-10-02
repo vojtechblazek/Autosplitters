@@ -79,6 +79,3 @@ reset{
     return old.Level != "Intro" && current.Level == "Intro"
         || old.Level == "Outro" && current.Level != "Outro";
 }
-
-
-
