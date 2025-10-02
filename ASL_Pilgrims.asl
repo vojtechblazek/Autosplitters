@@ -69,7 +69,7 @@ update{
 }
 
 start{
-    return current.Level == "HobosLair" && current.mouseInput == true;
+    return current.Level == "HobosLair" && current.mouseInput;
 }
 
 split{
@@ -116,4 +116,5 @@ exit{
     vars.inBearCave    = false; vars.inDrawBridge  = false; vars.inCastle      = false;
     vars.inGorge       = false;
 }
+
 
