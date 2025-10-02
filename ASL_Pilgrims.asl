@@ -69,9 +69,9 @@ onStart{
 }
 
 split{
-    return current.Level != old.Level
+    return (current.Level != old.Level
         && settings[current.Level]
-        && vars.CompletedSplits.Add(current.Level)
+        && vars.CompletedSplits.Add(current.Level))
         || current.Level == "Outro" && old.Level == "River"; // final split
 }
 
@@ -79,5 +79,6 @@ reset{
     return old.Level != "Intro" && current.Level == "Intro"
         || old.Level == "Outro" && current.Level != "Outro";
 }
+
 
 
