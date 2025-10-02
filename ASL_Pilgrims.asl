@@ -1,7 +1,7 @@
 // Pilgrims Autosplitter by blazie
 // Utilising ASL Help by Ero
-// v1.0.2
-// 1. 10. 2025
+// v1.1.1
+// 2. 10. 2025
 
 state("Pilgrims") {
     bool MouseInput: "UnityPlayer.dll", 0x408C50, 0x0; // for starting the run
@@ -39,13 +39,33 @@ startup {
 }
 
 init {
-    old.Level = "";
+    old.Scene = ""; current.Scene = "";
+    old.SceneCount = ""; current.SceneCount = "";
+    old.Level = "<default>"; current.Level = "<default>";
+
+    vars.levelName = "";
+    vars.isFirst = true;
 }
 
 update {
-    var scene = vars.Helper.Scenes.Loaded[0].Name;
-    if (!string.IsNullOrEmpty(scene))
-        current.Level = scene;
+    current.Scene = vars.Helper.Scenes.Active.Name ?? old.Scene;
+    foreach (var scene in vars.Helper.Scenes.Loaded) {
+    try {
+        if (scene != null && scene.IsValid){
+            vars.levelName = scene.Name ?? "<null>";
+        }	
+        else{
+            vars.levelName = "<invalid>";
+        }
+    }
+    catch{vars.levelName = "<error>";}
+    break;
+    }
+
+    // Filtering
+    if (vars.levelName != "<error>" && vars.levelName != "" && vars.levelName != "<null>" && vars.levelName != "<invalid>"){
+        current.Level = vars.levelName;
+    }
 }
 
 start {
@@ -66,3 +86,4 @@ reset {
     return old.Level != "Intro" && current.Level == "Intro"
         || old.Level == "Outro" && current.Level != "Outro";
 }
+
