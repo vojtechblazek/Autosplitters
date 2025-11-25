@@ -2,8 +2,8 @@
 //version 1.00 date 25.11.2025
 
 state("Bait-and-Tackle"){
-    bool inGame: "Bait-and-Tackle.exe", 0x05CF4EE0, 0xC8, 0x0, 0xB84;
-	uint sceneChange: "Bait-and-Tackle.exe", 0x05DFFB68, 0xDC8, 0x48, 0x10;  // starts at 19 for some reason, then increments with every screen change. Sometimes decrements though, hence the shouldSplit variable
+    bool inGame:      "Bait-and-Tackle.exe", 0x05CF4EE0, 0xC8, 0x0, 0xB84;
+    uint sceneChange: "Bait-and-Tackle.exe", 0x05DFFB68, 0xDC8, 0x48, 0x10;  // starts at 19 for some reason, then increments with every screen change. Sometimes decrements though, hence the shouldSplit variable
     uint mouseButton: "Bait-and-Tackle.exe", 0x05CC0A20, 0x148;              // 1 = LMB, 2 = RMB, 4 = MW depressed etc.
 }
 
@@ -18,5 +18,6 @@ split   {if (current.sceneChange == old.sceneChange + 1){
             if (vars.shouldSplit)  {return true;}
             if (!vars.shouldSplit) {vars.shouldSplit = true; return false;}}      
         }
+
 
 onReset {vars.shouldSplit = true;}
