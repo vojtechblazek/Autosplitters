@@ -2,8 +2,8 @@
 //date 29. 7. 2024
 
 state("SCHiM"){
-int chapter: "GameAssembly.dll", 0x01FB36C8, 0xB8, 0x64;
-int loadingScreen: "UnityPlayer.dll", 0x01D1E370, 0x550, 0xF0, 0x1E0;
+int chapter: "GameAssembly.dll", 0x01FB5908, 0xB8, 0x64;
+int loadingScreen: "UnityPlayer.dll", 0x01FA9398, 0x40, 0x100, 0x60, 0x1E0;
 }
 
 init{
