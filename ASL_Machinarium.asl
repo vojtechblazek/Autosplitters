@@ -1,21 +1,32 @@
-// Version 3.0.0
-// date 13. 6. 2025
+// Version 4.0.0
+// date 2. 11. 2026
 
 state("Machinarium", "dx12"){
-    // DX12 Version
+    // DX12 version
     uint Level: "Machinarium.exe", 0x203A18;
     bool Start: "Machinarium.exe", 0x2039EC;
     bool End: "Machinarium.exe", 0x002ACAE8, 0x340;
 }
-
+    // Legacy version
 state("Machinarium", "legacyW32"){
     uint Level: "Machinarium.exe", 0x1CC8B0;
     bool Start: "Machinarium.exe", 0x001CD804, 0x1C8, 0x238;
-    bool End: "Machinarium.exe",   0x001CD804, 0x1C8, 0x238; // this start and end is the same
+    bool End: "Machinarium.exe",   0x001CD804, 0x1C8, 0x238; // this start and end is the same (lastAnimation)
+}
+    // Legacy Mac OpenGL varsion
+state("Machinarium", "legacyMacOpenGL"){
+    uint Level: "Machinarium.exe", 0x1C447C;
+    byte Start: "Machinarium.exe", 0x001C59F0, 0x0;
+    bool End: "Machinarium.exe", 0x001C5A0C, 0x390;
+}
+    // NEWEST 2026 VERSION - 2.11.2026
+state("Machinarium", "NEW dx12"){
+    uint Level: "Machinarium.exe", 0x232AF4;
+    byte Start: "Machinarium.exe", 0x001C59F0, 0x0;
+    int End: "Machinarium.exe", 0x002D3978, 0x298;
 }
 
-startup{
-    vars.splitTimeStopwatch = new Stopwatch(); // for ending split 
+startup{ 
     vars.TimesInPrison = 0; // Count how many times the player has been in specific locations.
     vars.TimesInSewer = 0;
     vars.TimesInBand = 0;
@@ -23,10 +34,11 @@ startup{
     vars.TimesInPub = 0;
     vars.startDbg = 0;
 
-    settings.Add("VER", true, "Game Version (!) (check only one box!)"); // choose the game version before launching the game! (or restart LiveSplit after changing the version)
-        settings.Add("5429-A STM-W64-DX12", true, "Current Version (5429-A STM-W64-DX12)", "VER");
+    settings.Add("VER", true, "Game Version (!)"); // choose the game version before launching the game! (or restart LiveSplit after changing the version)
+        settings.Add("5738-A STM-W64-OGL",      false, "Newest game version (5738-A STM-W64-OGL)", "VER");
+        settings.Add("5429-A STM-W64-DX12", true, "Old DX12 Version (5429-A STM-W64-DX12)", "VER");
         settings.Add("4012-A STM-W32",      false, "Legacy Version (4012-A STM-W32)", "VER");
-        settings.Add("2975-A STM-W32",      false, "[NOT WORKING YET] Legacy Mac OpenGL Version (2975-A STM-W32)", "VER");
+        settings.Add("2975-A STM-W32",      false, "Legacy Mac OpenGL Version (2975-A STM-W32)", "VER");
     
     settings.Add("SPL", true, "Location Splits");
         settings.Add("PatrolStation",      true, "Patrol Station", "SPL");
@@ -61,8 +73,10 @@ startup{
 
 init{
     // Looks at which version is checked and connects the appropriate state
-    if (settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"]) {version = "dx12";}
-    if (settings["4012-A STM-W32"] && !settings["5429-A STM-W64-DX12"]) {version = "legacyW32";}
+    if (settings["5738-A STM-W64-OGL"] && !settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"] && !settings["2975-A STM-W32"]) {version = "NEW dx12";}
+    if (settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"] && !settings["2975-A STM-W32"] && !settings["5738-A STM-W64-OGL"]) {version = "OLD dx12";}
+    if (!settings["5429-A STM-W64-DX12"] && settings["4012-A STM-W32"] && !settings["2975-A STM-W32"] && !settings["5738-A STM-W64-OGL"]) {version = "legacyW32";}
+    if (!settings["5429-A STM-W64-DX12"] && !settings["4012-A STM-W32"] && settings["2975-A STM-W32"] && !settings["5738-A STM-W64-OGL"]) {version = "legacyMacOpenGL";}
 }
 
 update{ 
@@ -87,23 +101,46 @@ update{
         vars.TimesInTimesInPub++;
     }
 //Debugging section
-    // Starting the run
-    if (current.Level == 100 && !current.Start && old.Start) {vars.startDbg += 1;}
-    if (current.Level == 6)                                                  {vars.startDbg = 0;}
     
-    if (current.Level != old.Level){
+    // Starting - DX12 and legacy version
+    if (version == "OLD dx12" || version == "legacyW32"){
+        if (current.Level == 100 && !current.Start && old.Start) {vars.startDbg += 1; print("START DBG INCREASED TO " + vars.startDbg);}
+        if (current.Level == 6)                                                  {vars.startDbg = 0;}
+    }
+
+    // Starting - Mac version
+    if (version == "legacyMacOpenGL"){
+        if (current.Level == 100 && current.Start == 0 && old.Start == 3) {vars.startDbg += 1; print("START DBG INCREASED TO " + vars.startDbg);}
+        if (current.Level == 6){vars.startDbg = 0;}
+    }
+    
+    /* if (current.Level != old.Level){
         print("DEBUG: LEVEL VALUE CHANGED FROM " + old.Level + " TO " + current.Level);
     }
     if (current.Start != old.Start){
         print("DEBUG: Start VALUE CHANGED FROM " + old.Start + " TO " + current.Start);
-    }
+    } */
 }
 
 start{
-    if (current.Level == 100 && !current.Start && old.Start && vars.startDbg == 2){
+    if (version == "OLD dx12" || version == "legacyW32"){
+        if (current.Level == 100 && !current.Start && old.Start && vars.startDbg == 2){
         print("DEBUG: START ACTIVATED");
         return true;
+        }
     }
+
+    if (version == "legacyMacOpenGL"){
+        if (current.Level == 100 && current.Start == 0 && old.Start == 3 && vars.startDbg == 7){
+        print("DEBUG: START ACTIVATED");
+        return true;
+        }
+    }
+
+    if (version == "NEW dx12"){
+        return false;
+    }
+    
 }
 
 split{
@@ -182,7 +219,8 @@ split{
     if (current.Level == 2600 && old.Level == 2500){ // Entering the rooftop at the end of the game
         return settings["Roof"];
     }
-    if (current.Level == 2600 && current.End && !old.End){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
+    
+    if (current.Level == 2600 && current.End == 1 && current.End != old.End){ // Ends when Josef points at the ladder leading to the helicopter
         return true;
     }    
 }
