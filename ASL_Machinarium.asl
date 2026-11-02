@@ -35,8 +35,8 @@ startup{
     vars.startDbg = 0;
 
     settings.Add("VER", true, "Game Version (!)"); // choose the game version before launching the game! (or restart LiveSplit after changing the version)
-        settings.Add("5738-A STM-W64-OGL",      false, "Newest game version (5738-A STM-W64-OGL)", "VER");
-        settings.Add("5429-A STM-W64-DX12", true, "Old DX12 Version (5429-A STM-W64-DX12)", "VER");
+        settings.Add("5738-A STM-W64-OGL",  true,  "Newest game version (5738-A STM-W64-OGL)", "VER");
+        settings.Add("5429-A STM-W64-DX12", false, "Old DX12 Version (5429-A STM-W64-DX12)", "VER");
         settings.Add("4012-A STM-W32",      false, "Legacy Version (4012-A STM-W32)", "VER");
         settings.Add("2975-A STM-W32",      false, "Legacy Mac OpenGL Version (2975-A STM-W32)", "VER");
     
