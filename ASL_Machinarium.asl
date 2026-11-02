@@ -22,8 +22,8 @@ state("Machinarium", "legacyMacOpenGL"){
     // NEWEST 2026 VERSION - 2.11.2026
 state("Machinarium", "NEW dx12"){
     uint Level: "Machinarium.exe", 0x232AF4;
-    byte Start: "Machinarium.exe", 0x001C59F0, 0x0;
-    int End: "Machinarium.exe", 0x002D3978, 0x298;
+    bool Start: "Machinarium.exe", 0x232B20;
+    uint End: "Machinarium.exe", 0x002D3978, 0x298;
 }
 
 startup{ 
@@ -138,7 +138,9 @@ start{
     }
 
     if (version == "NEW dx12"){
-        return false;
+        if (current.Level == 100 && current.Start && !old.Start){
+            return true;
+        }
     }
     
 }
