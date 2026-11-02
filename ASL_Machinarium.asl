@@ -183,13 +183,8 @@ split{
         return settings["Roof"];
     }
     if (current.Level == 2600 && current.End && !old.End){// When the last animation starts, this sets up a clock measuring 14.333 seconds.
-        vars.splitTimeOffset = 14.333f;
-        vars.splitTimeStopwatch.Restart();
-    }    
-    if(vars.splitTimeStopwatch.IsRunning && vars.splitTimeStopwatch.Elapsed.TotalSeconds >= vars.splitTimeOffset){ // When the clock reaches 14.333 secs (or more), the clock reset and a split is performed.
-        vars.splitTimeStopwatch.Reset();
         return true;
-    }
+    }    
 }
 
 reset{
