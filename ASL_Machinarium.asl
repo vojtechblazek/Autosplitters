@@ -23,7 +23,8 @@ state("Machinarium", "legacyMacOpenGL"){
 state("Machinarium", "NEW dx12"){
     uint Level: "Machinarium.exe", 0x232AF4;
     bool Start: "Machinarium.exe", 0x232B20;
-    uint End: "Machinarium.exe", 0x002D3978, 0x298;
+    uint End: "Machinarium.exe", 0x00231B28, 0x1C;
+    bool melodyMachineUsed: "Machinarium.exe", 0x002D3978, 0x298;
 }
 
 startup{ 
@@ -222,9 +223,9 @@ split{
         return settings["Roof"];
     }
     
-    if (current.Level == 2600 && current.End == 1 && current.End != old.End){ // Ends when Josef points at the ladder leading to the helicopter
+    if (current.Level == 2600 && current.End == 17525 && old.End == 17267 && current.melodyMachineUsed){ // Ends when Josef points at the ladder leading to the helicopter
         return true;
-    }    
+    }     
 }
 
 reset{
