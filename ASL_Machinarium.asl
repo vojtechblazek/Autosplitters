@@ -104,6 +104,7 @@ update{
     }
     if (current.Level == 2600 && current.End == 17525 && old.End == 17267){
         vars.endDbg++;
+        print("ADDED 1 TO END_DBG");
     }
 //Debugging section
     
@@ -152,82 +153,107 @@ start{
 
 split{
     if (current.Level == 200 && old.Level == 6){ // Entering patrol station
+        print("Patrol split");
         return settings["PatrolStation"];
     }
     if (current.Level == 300 && old.Level != 300){ // Entering the bottom
+        print("The bottom split");
         return settings["Bottom"];
     }
     if (current.Level == 400 && old.Level != 400){ // Entering the furnace
+        print("Furnace split");
         return settings["Furnace"];
     }
     if (current.Level == 500 && old.Level == 400){ // As the prison cutscene starts to play
+        print("Guard room cutscene split");
         return settings["PrisonCutscene"];
     }
     if (current.Level == 600 && old.Level == 500){ // As you get to prison 
+        print("Prison 1 split");
         return settings["Prison"];
     }
     if (current.Level == 700 && old.Level == 600 && vars.TimesInPrison == 1){ // Entering the guard room from below
+        print("Guard room split");
         return settings["GuardRoom"];
     }
     if (current.Level == 600 && old.Level == 700){ // Entering the prison from the guard room
+        print("Prison 2 split");
         return settings["PrisonPuzzle"];
     }
     if (current.Level == 800 && old.Level == 500){ // Entering the Sea from the telescope room (location with boxes and a dog)
+        print("Sea split");
         return settings["Sea"];
     }
     if (current.Level == 1000 && old.Level == 800){ // Entering the place with the robot band from the Sea location
+        print("Band 1 split");
         return settings["Band"];
     }
     if (current.Level == 1000 && old.Level == 1500 && vars.TimesInBand == 2){ // Entering the place with the robot band after winning in checkers
+        print("afterCheckers split");
         return settings["AfterCheckers"];
     }
     if (current.Level == 1100 && old.Level == 2100 && vars.TimesInSquare == 1){ // Entering the Square for the first time
+        print("Square 1 split");
         return settings["Square"];
     }
     if (current.Level == 1200 && old.Level == 1100){ // Entering the Arcade bridge location
+        print("Arcade split");
         return settings["ArcadeBridge"];
     }
     if (current.Level == 1100 && old.Level == 1200 && vars.TimesInSquare == 2){ // Entering the Square after the Arcade Bridge
+        print("Square 2 split");
         return settings["AfterArcade"];
     }
     if (current.Level == 1000 && old.Level == 200){ // Entering the band place after collecting oil
+        print("Band 2 split");
         return settings["AfterOil"];
     }
     if (current.Level == 1400 && old.Level == 1100 && vars.TimesInSewer == 1){ // Entering the Sewer under the fountain. The location is entered 2 times, but we want to split only the first time.
+        print("Sewer split");
         return settings["Sewer"];
     }
     if (current.Level == 1600 && old.Level == 1400){ // Entering the elevator wall.
+        print("By the wall split");
         return settings["Wall"];
     }
     if (current.Level == 1800 && old.Level == 1600){ // Entering the upper wall (with the fan asking you riddles)
+        print("Angry fan split");
         return settings["AngryFan"];
     }
     if (current.Level == 1900 && old.Level == 1800){ // Falling down to the glasshouse
+        print("Glasshouse split");
         return settings["Glasshouse"];
     }
     if (current.Level == 2000 && old.Level == 1900){ // Entering the bridge with the policeman.
+        print("Bridge Pipe split");
         return settings["Pipes"];
     }
     if (current.Level == 2200 && old.Level == 2000){ // Entering the Elevator.
+        print("Elevator split");
         return settings["ElevatorAfterPipes"];
     }
     if (current.Level == 2300 && old.Level == 2200){ // Entering the great hallway; Both sides count with the value 2300, 2200 is reserved for the elevator.
+        print("Hallway split");
         return settings["Hallway"];
     }
     if (current.Level == 2300 && old.Level == 2400){ // Climbing to the toilet after defusing the bomb.
+        print("After toilet split");
         return settings["AfterDefuse"];
     }
     if (current.Level == 2500 && old.Level == 2300){ // Entering the Machinaris room. Only once in the speedrun is it entered from the hallway. The second time it's connected right from the basement by a cutscene.
+        print("At Machinari split");
         return settings["Machinari"];
     }
     if (current.Level == 2300 && old.Level == 2500){ // When first coming down from Machinari to the basement.
         return settings["AfterMachinari"];
     }
     if (current.Level == 2600 && old.Level == 2500){ // Entering the rooftop at the end of the game
+        print("Roof split");
         return settings["Roof"];
     }
     
-    if (current.Level == 2600 && current.End == 17525 && old.End == 17267 && vars.endDbg == 2){ // Ends when Josef points at the ladder leading to the helicopter
+    if (current.Level == 2600 && current.End == 17525 && old.End == 17267){ // Ends when Josef points at the ladder leading to the helicopter
+        print("End split");
         return true;
     }    
 }
