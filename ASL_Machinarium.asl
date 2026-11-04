@@ -100,7 +100,7 @@ update{
         vars.TimesInSquare++;
     }
     if (current.Level == 1500 && old.Level != 1500){
-        vars.TimesInTimesInPub++;
+        vars.TimesInPub++;
     }
     if (current.Level == 2600 && current.End == 17525 && old.End == 17267){
         vars.endDbg++;
